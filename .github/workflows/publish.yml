@@ -1,0 +1,37 @@
+name: Build and Publish Docker Image
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    strategy:
+      matrix:
+        imageName: ["niximage", "niximage-dind"]
+    env:
+      BUILDX_NO_DEFAULT_ATTESTATIONS: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build & Push
+        uses: devcontainers/ci@v0.3
+        with:
+          cacheFrom: ghcr.io/devtemplates/${{ matrix.imageName }}
+          imageName: ghcr.io/devtemplates/${{ matrix.imageName }}
+          imageTag: latest
+          platform: linux/amd64,linux/arm64
+          push: always
+          subFolder: images/${{ matrix.imageName }}
