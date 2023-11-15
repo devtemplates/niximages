@@ -1,0 +1,81 @@
+name: Build and Publish Docker Image
+on:
+  push:
+    branches:
+      - main
+jobs:
+  get-next-releases:
+    runs-on: ubuntu-latest
+    outputs:
+      releases: ${{ steps.get-next-releases.outputs.releases }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Get next releases
+        id: get-next-releases
+        run: |
+          RELEASES=$(npx tsx scripts/get-next-releases.ts)
+          echo "releases=$RELEASES" >> $GITHUB_OUTPUT
+  echo-results:
+    runs-on: ubuntu-latest
+    needs: get-next-releases
+    strategy:
+      matrix:
+        include: ${{ fromJson(needs.get-next-releases.outputs.releases) }}
+    steps:
+      - name: Echo
+        env:
+          DEVCONTAINER_BASE_IMAGE_TAG: ${{ matrix.image.devcontainerTag.name }}
+          DEVCONTAINER_DOCKER_VERSION: ${{ matrix.image.dockerVersion }}
+          DEVCONTAINER_NIX_VERSION: ${{ matrix.image.nixVersion }}
+          DEVCONTAINER_PACKAGE_VERSION: ${{ matrix.image.packageVersion }}
+          DEVCONTAINER_IMAGE_VERSION: ${{ matrix.image.imageVersion }}
+          DEVCONTAINER_IMAGE_NAME: ${{ matrix.image.imageName }}
+        run: |
+          echo "DEVCONTAINER_BASE_IMAGE_TAG=$DEVCONTAINER_BASE_IMAGE_TAG"
+          echo "DEVCONTAINER_DOCKER_VERSION=$DEVCONTAINER_DOCKER_VERSION"
+          echo "DEVCONTAINER_NIX_VERSION=$DEVCONTAINER_NIX_VERSION"
+          echo "DEVCONTAINER_PACKAGE_VERSION=$DEVCONTAINER_PACKAGE_VERSION"
+          echo "DEVCONTAINER_IMAGE_VERSION=$DEVCONTAINER_IMAGE_VERSION"
+          echo "DEVCONTAINER_IMAGE_NAME=$DEVCONTAINER_IMAGE_NAME"
+
+  # build-and-publish:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     packages: write
+  #   strategy:
+  #     matrix:
+  #       imageName: ["niximage", "niximage-dind"]
+  #   env:
+  #     BUILDX_NO_DEFAULT_ATTESTATIONS: 1
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Set up QEMU
+  #       uses: docker/setup-qemu-action@v2
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v2
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v2
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Build & Push
+  #       uses: devcontainers/ci@v0.3
+  #       env:
+  #         DEVCONTAINER_BASE_IMAGE_TAG: "1.2.1-ubuntu-22.04"
+  #         DEVCONTAINER_DOCKER_VERSION: "27.0.3"
+  #         DEVCONTAINER_NIX_VERSION: "2.24.9"
+  #         DEVCONTAINER_PACKAGE_VERSION: "0.0.1"
+  #         DEVCONTAINER_IMAGE_VERSION: "0.0.1"
+  #         DEVCONTAINER_IMAGE_NAME: ${{ matrix.imageName }}
+  #       with:
+  #         cacheFrom: ghcr.io/devtemplates/${{ matrix.imageName }}
+  #         imageName: ghcr.io/devtemplates/${{ matrix.imageName }}
+  #         imageTag: jammy,latest
+  #         platform: linux/amd64
+  #         push: always
+  #         subFolder: images/${{ matrix.imageName }}
