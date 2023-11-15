@@ -1,0 +1,13 @@
+name: Build and Publish Docker Image
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * *"
+permissions:
+  packages: write
+  contents: read
+jobs:
+  push-next-release:
+    uses: ./.github/workflows/call-push-next-releases.yml

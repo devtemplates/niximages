@@ -1,0 +1,22 @@
+{
+  "build": {
+    "dockerfile": "../../../common/Dockerfile",
+    "context": "../../../",
+    "args": {
+      "BASE_IMAGE_TAG": "${localEnv:DEVCONTAINER_BASE_IMAGE_TAG}",
+      "DOCKER_VERSION": "${localEnv:DEVCONTAINER_DOCKER_VERSION}",
+      "NIX_VERSION": "${localEnv:DEVCONTAINER_NIX_VERSION}",
+      "PACKAGE_VERSION": "${localEnv:DEVCONTAINER_PACKAGE_VERSION}",
+      "IMAGE_VERSION": "${localEnv:DEVCONTAINER_IMAGE_VERSION}",
+      "IMAGE_NAME": "${localEnv:DEVCONTAINER_IMAGE_NAME}"
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/nix:1": {
+      "version": "${localEnv:DEVCONTAINER_NIX_VERSION}",
+      "extraNixConfig": "experimental-features = nix-command flakes",
+      "packages": "direnv",
+      "multiUser": false
+    }
+  }
+}
