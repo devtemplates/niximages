@@ -12,11 +12,8 @@
     }
   },
   "features": {
-    "ghcr.io/devcontainers/features/nix:1": {
-      "version": "${localEnv:DEVCONTAINER_NIX_VERSION}",
-      "extraNixConfig": "experimental-features = nix-command flakes",
-      "packages": "direnv",
-      "multiUser": false
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "${localEnv:DEVCONTAINER_DOCKER_VERSION}"
     }
   }
 }
