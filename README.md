@@ -4,11 +4,11 @@
 
 ## Images
 
-### [gchr.io/devtemplates/niximage](./images/niximage/README.md)
+### [ghcr.io/devtemplates/niximage](./images/niximage/README.md)
 
 > Standalone Docker image with the Nix package manager installed. Designed as ad devcontainer for libraries and/or smaller packages.
 
-### [gchr.io/devtemplates/niximage](./images/niximage-dind/README.md)
+### [ghcr.io/devtemplates/niximage](./images/niximage-dind/README.md)
 
 > Docker image with the Nix package manager and Docker installed (using [docker-in-docker](https://github.com/devcontainers/features/tree/main/src/docker-in-docker)). This is helpful for repositories that plan to build application images.
 

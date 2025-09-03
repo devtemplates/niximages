@@ -13,7 +13,7 @@ See the root [niximages README](../../README.md) for more details on how to effe
 ```json
 {
   "name": "my-pkg",
-  "image": "gchr.io/devtemplates/niximage-dind:latest",
+  "image": "ghcr.io/devtemplates/niximage-dind:latest",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/repo,type=bind",
   "workspaceFolder": "/workspaces/repo",
   "mounts": ["source=niximage-nix,target=/nix,type=volume"]
