@@ -78,7 +78,7 @@ export const IMAGES = ["nix-devcontainer", "nix-devcontainer-dind"];
  * 5. If the versions are different, create a new image.
  * 6. Determine the new image version.
  * ---
- * 7. Get matrix of releases and tags to Github actions somehow? Or do I need to build and deploy purely from code?
+ * 7. Get matrix of releases and tags to GitHub actions somehow? Or do I need to build and deploy purely from code?
  */
 export async function getNextReleases() {
   const nixVersion = await getLatestNixVersion();
