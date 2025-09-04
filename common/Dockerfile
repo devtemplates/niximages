@@ -5,23 +5,38 @@
 ARG BASE_IMAGE_TAG
 FROM mcr.microsoft.com/vscode/devcontainers/base:${BASE_IMAGE_TAG}
 
-# Configure direnv by ensuring the hook is executed
-COPY ./common/scripts/configure-direnv.sh /tmp/scripts/configure-direnv.sh
-RUN /tmp/scripts/configure-direnv.sh \
-  && rm -rf /tmp/scripts/configure-direnv.sh
+# ==============================================================================
+# System-level setup (runs as root, least likely to change)
+# ==============================================================================
 
-# We are installing nix under a single user, vscode, to avoid complexities of
-# ensuring the nix dameon is running. We are using the user vscode as that is
-# the default user created by the base devcontainer. There is no reason to swim
-# upstream and choose a different user.
-USER vscode
+# Configure direnv system-wide
+COPY ./common/scripts/direnv-configure.sh /tmp/scripts/direnv-configure.sh
+RUN /tmp/scripts/direnv-configure.sh \
+  && rm -rf /tmp/scripts/direnv-configure.sh
 
-# NOTE: This adds a direnv config file that automatically whitelists the
-# /workspaces/repo/.envrc file which makes the default experience of working
-# with this devcontainer easier when mounted source code is mounted into
-# /workspaces/repo.
+# Create both users in a single layer
+RUN groupadd --gid 1001 runner \
+  && useradd --uid 1001 --gid runner --shell /bin/bash --create-home runner \
+  && echo 'runner ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/runner \
+  && mkdir -p /home/runner/.config/direnv \
+  && mkdir -p /home/vscode/.config/direnv \
+  && chown -R runner:runner /home/runner/.config \
+  && chown -R vscode:vscode /home/vscode/.config
+
+# ==============================================================================
+# User configuration (more likely to change during development)
+# ==============================================================================
+
+# Copy configuration files for both users
+COPY --chown=vscode:vscode ./common/config/direnv.toml /home/vscode/.config/direnv/direnv.toml
+COPY --chown=runner:runner ./common/config/direnv.toml /home/runner/.config/direnv/direnv.toml
+
+# Set working directory
 WORKDIR /workspaces/repo
-COPY ./common/config/direnv.toml /home/vscode/.config/direnv/direnv.toml
+
+# ==============================================================================
+# Build metadata (most likely to change, goes last)
+# ==============================================================================
 
 # NOTE: These do not get actively used in the Dockerfile during build. They are
 # set so that we can automate image versioning/tagging. They are passed in at
@@ -41,3 +56,29 @@ LABEL niximage.image_name=${IMAGE_NAME} \
   niximage.docker_version=${DOCKER_VERSION} \
   niximage.nix_version=${NIX_VERSION} \
   niximage.base_image_tag=${BASE_IMAGE_TAG}
+
+# ==============================================================================
+# Install nix
+# ==============================================================================
+
+# Installs nix
+COPY ./common/scripts/nix-install.sh /tmp/scripts/nix-install.sh
+RUN /tmp/scripts/nix-install.sh \
+  && rm -rf /tmp/scripts/nix-install.sh
+
+# Copies over a helper script, intended to be sourced, that will start the
+# nix daemon in the background. It is used in the entrypoint AND in a patch
+# we apply below to /bin/sh which ensures that nix is available when running
+# via non interactive non login shells (GHA).
+COPY ./common/scripts/nix-daemon-start.sh /usr/local/share/nix-daemon-start.sh
+
+# This applies the patch to /bin/sh which ensures nix is available when running
+# via non interactive non login shells (GHA).
+COPY ./common/scripts/sh-nix-patch.sh /tmp/scripts/sh-nix-patch.sh
+RUN /tmp/scripts/sh-nix-patch.sh \
+  && rm -rf /tmp/scripts/sh-nix-patch.sh
+
+# Ensures that when running the container, the nix daemon is started.
+COPY ./common/scripts/entrypoint.sh /usr/local/share/entrypoint.sh
+ENTRYPOINT ["/usr/local/share/entrypoint.sh"]
+CMD ["/bin/bash"]

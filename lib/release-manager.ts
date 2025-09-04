@@ -22,7 +22,7 @@ import { getPackageVersion } from "./image-dependencies/package.js";
  * next release
  * -------------------------------------------------------------------------- */
 
-export const IMAGES = ["niximage", "niximage-dind"];
+export const IMAGES = ["nix-devcontainer", "nix-devcontainer-dind"];
 
 /* -----------------------------------------------------------------------------
  * next release
