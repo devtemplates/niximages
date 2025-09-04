@@ -2,4 +2,4 @@
 warn_timeout = "10m"
 
 [whitelist]
-exact = [ "/workspaces/repo/.envrc" ]
+prefix = [ "/workspaces" ]

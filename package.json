@@ -1,6 +1,6 @@
 {
   "name": "niximages",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "private": true,
   "description": "Docker [devcontainer](https://code.visualstudio.com/docs/remote/containers) images built to be used with the Nix package manager with declarative development environments defined using nix flakes.",
