@@ -37,7 +37,7 @@ console.log(
     ),
 
     /**
-     * An array of manfiest image URIs with accompanying aliases for each
+     * An array of manifest image URIs with accompanying aliases for each
      * platform. This is required because each image is independently built on
      * optimized runners but we still want to allow users to pull from the base
      * tag and get the platform optimized image. This is used upstream as a
