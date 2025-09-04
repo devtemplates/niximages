@@ -1,5 +1,5 @@
 # Attempt to start nix daemon
-# Forked from from https://github.com/devcontainers/features/blob/main/src/nix/nix-entrypoint.sh
+# Forked from https://github.com/devcontainers/features/blob/main/src/nix/nix-entrypoint.sh
 
 # Check if nix-daemon is already running
 if ! pidof nix-daemon >/dev/null 2>&1; then

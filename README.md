@@ -27,7 +27,7 @@ To use this image as the base for your own devcontainer, create a `.devcontainer
 
 **Notes:**
 
-- `workspaceMount` and `workspaceFolder` are explicitly set to `/workspaces/repo`. Without this, the devcontainer will dynamically create the a directory `/workspaces/<REPO_DIRECTORY_NAME>`. There is nothing inherently wrong with this, however the images come with `direnv` installed and and configured to automatically allow executing `/workspaces/repo/.envrc` which makes working with the devcontainer for the first time a bit more intuitive.
+- `workspaceMount` and `workspaceFolder` are explicitly set to `/workspaces/repo`. Without this, the devcontainer will dynamically create the directory `/workspaces/<REPO_DIRECTORY_NAME>`. There is nothing inherently wrong with this, however the images come with `direnv` installed and configured to automatically allow executing `/workspaces/repo/.envrc` which makes working with the devcontainer for the first time a bit more intuitive.
 - `mounts` is set as a convenience if you are using devcontainers locally rather than via something like CODESPACES. Mounting the `/nix` directory ensures dependency binaries are cached between devcontainer builds.
 
 ## More Resources
