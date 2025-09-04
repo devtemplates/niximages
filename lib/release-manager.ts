@@ -42,10 +42,10 @@ export const IMAGES = ["niximage", "niximage-dind"];
  * dependability and automation are more important.
  *
  * Latest Tags
- * - gchr.io/devtemplates/niximage:latest
- * - gchr.io/devtemplates/niximage:jammy
- * - gchr.io/devtemplates/niximage:ubuntu
- * - gchr.io/devtemplates/niximage:ubuntu-22.04
+ * - ghcr.io/devtemplates/niximage:latest
+ * - ghcr.io/devtemplates/niximage:jammy
+ * - ghcr.io/devtemplates/niximage:ubuntu
+ * - ghcr.io/devtemplates/niximage:ubuntu-22.04
  *
  * Version Tags
  * - ghcr.io/devtemplates/niximage:1-ubuntu-22.04
@@ -72,7 +72,7 @@ export const IMAGES = ["niximage", "niximage-dind"];
  * versions will be the same.
  *
  * 1. For each image type, loop through each supported OS.
- * 2. Get the current versions used getNixImageBuildDetails('gchr.io/devtemplates/niximage:jammy')
+ * 2. Get the current versions used getNixImageBuildDetails('ghcr.io/devtemplates/niximage:jammy')
  * 3. Build a FutureImageDetails object.
  * 4. Compare the current image details with the future image details.
  * 5. If the versions are different, create a new image.
@@ -226,10 +226,10 @@ export function computeNextImageVersion({
  * a release.
  *
  * Latest Tags
- * - gchr.io/devtemplates/niximage:latest
- * - gchr.io/devtemplates/niximage:ubuntu
- * - gchr.io/devtemplates/niximage:ubuntu-22.04
- * - gchr.io/devtemplates/niximage:jammy
+ * - ghcr.io/devtemplates/niximage:latest
+ * - ghcr.io/devtemplates/niximage:ubuntu
+ * - ghcr.io/devtemplates/niximage:ubuntu-22.04
+ * - ghcr.io/devtemplates/niximage:jammy
  *
  * Version Tags
  * - ghcr.io/devtemplates/niximage:1-ubuntu-22.04
@@ -243,16 +243,16 @@ export function getReleaseTags(
   const { osName, osVersion } = devcontainerTag;
   const { osVersionName, latest } = release;
 
-  const baseImage = `gchr.io/devtemplates/${imageName}`;
+  const baseImage = `ghcr.io/devtemplates/${imageName}`;
   const tags: string[] = [];
 
-  // `gchr.io/devtemplates/niximage:latest`,
+  // `ghcr.io/devtemplates/niximage:latest`,
   latest && tags.push(`${baseImage}:latest`);
-  // gchr.io/devtemplates/niximage:ubuntu
+  // ghcr.io/devtemplates/niximage:ubuntu
   latest && tags.push(`${baseImage}:${osName}`);
-  // gchr.io/devtemplates/niximage:jammy
+  // ghcr.io/devtemplates/niximage:jammy
   tags.push(`${baseImage}:${osVersionName}`);
-  // gchr.io/devtemplates/niximage:ubuntu-22.04
+  // ghcr.io/devtemplates/niximage:ubuntu-22.04
   tags.push(`${baseImage}:${osName}-${osVersion}`);
 
   const fullVersion = imageVersion;

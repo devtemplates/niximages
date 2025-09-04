@@ -64,28 +64,28 @@ describe("release manager", async () => {
       expect(ubuntu20StandaloneImage?.image.imageName).toEqual("niximage");
       expect(ubuntu20StandaloneImage?.imagePlatforms).toHaveLength(1);
       expect(ubuntu20StandaloneImage?.imageTags).toContain(
-        "gchr.io/devtemplates/niximage:ubuntu-20.04",
+        "ghcr.io/devtemplates/niximage:ubuntu-20.04",
       );
 
       const ubuntu22StandaloneImage = newDetails[1];
       expect(ubuntu22StandaloneImage?.image.imageName).toEqual("niximage");
       expect(ubuntu22StandaloneImage?.imagePlatforms).toHaveLength(2);
       expect(ubuntu22StandaloneImage?.imageTags).toContain(
-        "gchr.io/devtemplates/niximage:ubuntu-22.04",
+        "ghcr.io/devtemplates/niximage:ubuntu-22.04",
       );
 
       const ubuntu20DindImage = newDetails[2];
       expect(ubuntu20DindImage?.image.imageName).toEqual("niximage-dind");
       expect(ubuntu20DindImage?.imagePlatforms).toHaveLength(1);
       expect(ubuntu20DindImage?.imageTags).toContain(
-        "gchr.io/devtemplates/niximage-dind:ubuntu-20.04",
+        "ghcr.io/devtemplates/niximage-dind:ubuntu-20.04",
       );
 
       const ubuntu22DindImage = newDetails[3];
       expect(ubuntu22DindImage?.image.imageName).toEqual("niximage-dind");
       expect(ubuntu22DindImage?.imagePlatforms).toHaveLength(2);
       expect(ubuntu22DindImage?.imageTags).toContain(
-        "gchr.io/devtemplates/niximage-dind:ubuntu-22.04",
+        "ghcr.io/devtemplates/niximage-dind:ubuntu-22.04",
       );
     }, 10000);
   });
@@ -97,13 +97,13 @@ describe("release manager", async () => {
       const osRelease = supportedOsReleases[1];
 
       expect(getReleaseTags(nixImage, osRelease)).toEqual([
-        "gchr.io/devtemplates/niximage:latest",
-        "gchr.io/devtemplates/niximage:ubuntu",
-        "gchr.io/devtemplates/niximage:jammy",
-        "gchr.io/devtemplates/niximage:ubuntu-22.04",
-        "gchr.io/devtemplates/niximage:0.0.1-ubuntu-22.04",
-        "gchr.io/devtemplates/niximage:0.0-ubuntu-22.04",
-        "gchr.io/devtemplates/niximage:0-ubuntu-22.04",
+        "ghcr.io/devtemplates/niximage:latest",
+        "ghcr.io/devtemplates/niximage:ubuntu",
+        "ghcr.io/devtemplates/niximage:jammy",
+        "ghcr.io/devtemplates/niximage:ubuntu-22.04",
+        "ghcr.io/devtemplates/niximage:0.0.1-ubuntu-22.04",
+        "ghcr.io/devtemplates/niximage:0.0-ubuntu-22.04",
+        "ghcr.io/devtemplates/niximage:0-ubuntu-22.04",
       ]);
     });
   });
